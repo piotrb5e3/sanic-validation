@@ -1,5 +1,7 @@
 # sanic-validation
-Validation for sanic endpoints
+[![Build Status](https://travis-ci.org/piotrb5e3/sanic-validation.svg?branch=master)](https://travis-ci.org/piotrb5e3/sanic-validation)
+
+Validation for sanic endpoints.
 
 ## Usage example
 
@@ -21,6 +23,11 @@ async def _simple_endpoint(request):
 
 app.run('0.0.0.0')
 ```
+
+### Schema format
+Internally, sanic-validation uses [cerberus](https://github.com/pyeve/cerberus) as a validation provider.
+Detailed format documentation can be found [here](http://docs.python-cerberus.org/en/stable/schemas.html).
+
 ### Example validation success
 #### Request
 ```
