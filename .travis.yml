@@ -3,9 +3,9 @@
     - "3.5"
     - "3.6"
   env:
+    - SANIC_VERSION=""  # Latest
     - SANIC_VERSION="==0.7.0"
     - SANIC_VERSION="==0.6.0"
-    - SANIC_VERSION="==0.5.4"
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
