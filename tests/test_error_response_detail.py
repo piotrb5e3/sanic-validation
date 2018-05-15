@@ -1,0 +1,132 @@
+import unittest
+from sanic import Sanic
+from sanic.response import json
+
+from sanic_validation import validate_json
+
+
+class TestErrorResponseDetailForJson(unittest.TestCase):
+    _endpoint_schema = {
+        'name': {
+            'type': 'string',
+            'required': True
+        },
+        'job': {
+            'type': 'dict',
+            'schema': {
+                'company_name': {
+                    'type': 'string',
+                    'minlength': 5
+                },
+                'position_name': {
+                    'type': 'string',
+                    'required': True
+                }
+            }
+        },
+        'past_workplaces': {
+            'type': 'list',
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'company_name': {
+                        'type': 'string'
+                    },
+                    'responsibilities': {
+                        'type': 'list',
+                        'schema': {
+                            'type': 'string'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    _request_data = {
+        'name':
+        1234,
+        'job': {
+            'company_name': 'abcd'
+        },
+        'past_workplaces': [{
+            'company_name': 'hamburger stand',
+            'responsibilities': ['flipping', 1234]
+        }, {
+            'company_name':
+            5678,
+            'responsibilities': [{
+                'qualifier': '_123_xc'
+            }, ['audit']]
+        }, 'GGG inc.'],
+        '_dummy':
+        1234
+    }
+
+    _expected_errors = [{
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'name',
+        'constraint': 'string'
+    }, {
+        'rule': 'required',
+        'entry_type': 'json_data_property',
+        'entry': 'job.position_name',
+        'constraint': True
+    }, {
+        'rule': 'minlength',
+        'entry_type': 'json_data_property',
+        'entry': 'job.company_name',
+        'constraint': 5
+    }, {
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'past_workplaces.0.responsibilities.1',
+        'constraint': 'string'
+    }, {
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'past_workplaces.1.responsibilities.0',
+        'constraint': 'string'
+    }, {
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'past_workplaces.1.responsibilities.1',
+        'constraint': 'string'
+    }, {
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'past_workplaces.1.company_name',
+        'constraint': 'string'
+    }, {
+        'rule': 'type',
+        'entry_type': 'json_data_property',
+        'entry': 'past_workplaces.2',
+        'constraint': 'dict'
+    }, {
+        'rule': 'allowed_field',
+        'entry_type': 'json_data_property',
+        'entry': '_dummy',
+        'constraint': False
+    }]
+
+    _app = None
+
+    def setUp(self):
+        self._app = Sanic()
+
+        @self._app.route('/')
+        @validate_json(self._endpoint_schema)
+        async def _endpoint(request):
+            return json({'status': 'ok'})
+
+    def test_response_should_contain_all_errors(self):
+        _, response = self._app.test_client.get('/', json=self._request_data)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(response.json['error']['message'],
+                         'Validation failed.')
+        self.assertEqual(response.json['error']['type'], 'validation_failed')
+
+        self.assertCountEqual(response.json['error']['invalid'],
+                              self._expected_errors)

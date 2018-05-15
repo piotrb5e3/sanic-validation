@@ -1,0 +1,11 @@
+  language: python
+  python:
+    - "3.5"
+    - "3.6"
+    - "3.7"
+  env:
+    - SANIC_VERSION="==0.7.0"
+    - SANIC_VERSION="==0.6.0"
+    - SANIC_VERSION="==0.5.4"
+  script:
+    - ./setup.py test
