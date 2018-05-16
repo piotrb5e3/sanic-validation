@@ -3,6 +3,9 @@
 
 Validation for sanic endpoints.
 
+## Installation
+`pip install sanic-validation`
+
 ## Usage example
 
 ```
