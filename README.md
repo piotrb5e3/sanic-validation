@@ -7,7 +7,7 @@ Validation for sanic endpoints.
 `pip install sanic-validation`
 
 ## Usage example
-
+### Body JSON validation
 ```
 from sanic import Sanic
 from sanic.response import json
@@ -23,6 +23,26 @@ schema = {'name': {'type': 'string', 'required': True}}
 @validate_json(schema)
 async def _simple_endpoint(request):
     return json({'message': 'Hello ' + request.json['name']})
+
+app.run('0.0.0.0')
+```
+
+### Query parameters validation
+```
+from sanic import Sanic
+from sanic.response import json
+from sanic_validation import validate_args
+
+
+app = Sanic()
+
+schema = {'name': {'type': 'string', 'required': True}}
+
+
+@app.route('/')
+@validate_args(schema)
+async def _simple_endpoint(request):
+    return json({'message': 'Hello ' + request.raw_args['name']})
 
 app.run('0.0.0.0')
 ```
