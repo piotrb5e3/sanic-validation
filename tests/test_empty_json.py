@@ -16,7 +16,7 @@ class TestEmptyJsonValidation(unittest.TestCase):
         @self._app.route('/')
         @validate_json(self._endpoint_schema)
         async def _simple_endpoint(request):
-            return text("OK")
+            return text('OK')
 
     def test_endpoint_should_not_accept_empty_body(self):
         _, response = self._app.test_client.get('/')
@@ -28,4 +28,4 @@ class TestEmptyJsonValidation(unittest.TestCase):
     def test_endpoint_should_accept_empty_json_object(self):
         _, response = self._app.test_client.get('/', json={})
         self.assertEqual(response.status, 200)
-        self.assertEqual(response.text, "OK")
+        self.assertEqual(response.text, 'OK')
