@@ -2,7 +2,7 @@ import unittest
 from sanic import Sanic
 from sanic.response import json
 
-from sanic_validation import validate_json
+from sanic_validation import validate_json, validate_args
 
 
 class TestErrorResponseDetailForJson(unittest.TestCase):
@@ -122,6 +122,48 @@ class TestErrorResponseDetailForJson(unittest.TestCase):
 
     def test_response_should_contain_all_errors(self):
         _, response = self._app.test_client.get('/', json=self._request_data)
+
+        self.assertEqual(response.status, 400)
+        self.assertEqual(response.json['error']['message'],
+                         'Validation failed.')
+        self.assertEqual(response.json['error']['type'], 'validation_failed')
+
+        self.assertCountEqual(response.json['error']['invalid'],
+                              self._expected_errors)
+
+
+class TestErrorResponseDetailForParams(unittest.TestCase):
+    _endpoint_schema = {
+        'name': {
+            'type': 'string',
+            'required': True
+        },
+    }
+
+    _params_data = {'job': 'cook'}
+
+    _expected_errors = [{
+        'entry_type': 'query_argument',
+        'entry': 'job',
+        'rule': 'allowed_field',
+        'constraint': False
+    }, {
+        'entry_type': 'query_argument',
+        'entry': 'name',
+        'rule': 'required',
+        'constraint': True
+    }]
+
+    def setUp(self):
+        self._app = Sanic()
+
+        @self._app.route('/')
+        @validate_args(self._endpoint_schema)
+        async def _endpoint(request):
+            return json({'status': 'ok'})
+
+    def test_response_should_contain_all_errors(self):
+        _, response = self._app.test_client.get('/', params=self._params_data)
 
         self.assertEqual(response.status, 400)
         self.assertEqual(response.json['error']['message'],
