@@ -18,6 +18,22 @@ def validate_json(schema):
     return vd
 
 
+def validate_args(schema):
+    validator = Validator(schema)
+
+    def vd(f):
+        def v(request, *args, **kwargs):
+            validation_passed = validator.validate(request.raw_args or {})
+            if validation_passed and request.raw_args is not None:
+                return f(request, *args, **kwargs)
+            else:
+                return _validation_failed_response(validator)
+
+        return v
+
+    return vd
+
+
 def _validation_failed_response(validator):
     return json(
         {
