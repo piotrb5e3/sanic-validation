@@ -116,3 +116,17 @@ Keep-Alive: 5
     }
 }
 ```
+
+
+## Building the documentation
+### Requirements
+* Python
+* make
+* Sphinx: `pip install sphinx`
+* sphinxcontrib-fulltoc: `pip install sphinxcontrib-fulltoc`
+
+### Building
+```
+cd docs
+make html
+```
