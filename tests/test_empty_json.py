@@ -20,10 +20,17 @@ class TestEmptyJsonValidation(unittest.TestCase):
 
     def test_endpoint_should_not_accept_empty_body(self):
         _, response = self._app.test_client.get('/')
-        self.assertEqual(response.status, 400)
+        self.assertEqual(response.status, 415)
         self.assertEqual(response.json['error']['message'],
-                         'Validation failed.')
-        self.assertEqual(response.json['error']['type'], 'validation_failed')
+                         'Expected JSON body.')
+        self.assertEqual(response.json['error']['type'],
+                         'unsupported_media_type')
+        self.assertEqual(response.json['error']['invalid'], [{
+            'entry_type': 'request_body',
+            'entry': '',
+            'rule': 'json',
+            'constraint': True
+        }])
 
     def test_endpoint_should_accept_empty_json_object(self):
         _, response = self._app.test_client.get('/', json={})

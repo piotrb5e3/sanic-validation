@@ -3,6 +3,7 @@ from cerberus import Validator
 
 JSON_DATA_ENTRY_TYPE = 'json_data_property'
 QUERY_ARG_ENTRY_TYPE = 'query_argument'
+REQ_BODY_ENTRY_TYPE = 'request_body'
 
 
 def validate_json(schema, clean=False):
@@ -19,8 +20,10 @@ def validate_json(schema, clean=False):
 
     def vd(f):
         def v(request, *args, **kwargs):
+            if request.json is None:
+                return _request_body_not_json_response()
             validation_passed = validator.validate(request.json or {})
-            if validation_passed and request.json is not None:
+            if validation_passed:
                 if clean:
                     kwargs['valid_json'] = validator.document
                 return f(request, *args, **kwargs)
@@ -114,3 +117,20 @@ def _constraint(error):
     if error.rule == 'coerce':
         return True
     return error.constraint or False
+
+
+def _request_body_not_json_response():
+    return json(
+        {
+            'error': {
+                'type': 'unsupported_media_type',
+                'message': 'Expected JSON body.',
+                'invalid': [{
+                    'entry_type': REQ_BODY_ENTRY_TYPE,
+                    'entry': '',
+                    'rule': 'json',
+                    'constraint': True
+                }],
+            }
+        },
+        status=415)
