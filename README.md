@@ -1,13 +1,15 @@
 # sanic-validation
 [![Build Status](https://travis-ci.org/piotrb5e3/sanic-validation.svg?branch=master)](https://travis-ci.org/piotrb5e3/sanic-validation)
 
-Validation for sanic endpoints.
+sanic-validation is an extension to sanic that simplifies validating request data.
 
 ## Installation
 `pip install sanic-validation`
 
+## Documentation
+Documentation is available at [ReadTheDocs](https://sanic-validation.readthedocs.io/en/stable/).
+
 ## Usage example
-### Body JSON validation
 ```
 from sanic import Sanic
 from sanic.response import json
@@ -21,111 +23,21 @@ schema = {'name': {'type': 'string', 'required': True}}
 
 @app.route('/')
 @validate_json(schema)
-async def _simple_endpoint(request):
+async def hello_service(request):
     return json({'message': 'Hello ' + request.json['name']})
 
 app.run('0.0.0.0')
 ```
 
-### Query parameters validation
-```
-from sanic import Sanic
-from sanic.response import json
-from sanic_validation import validate_args
-
-
-app = Sanic()
-
-schema = {'name': {'type': 'string', 'required': True}}
-
-
-@app.route('/')
-@validate_args(schema)
-async def _simple_endpoint(request):
-    return json({'message': 'Hello ' + request.raw_args['name']})
-
-app.run('0.0.0.0')
-```
-
-### Schema format
-Internally, sanic-validation uses [cerberus](https://github.com/pyeve/cerberus) as a validation provider.
-Detailed format documentation can be found [here](http://docs.python-cerberus.org/en/stable/schemas.html).
-
-### Example validation success
-#### Request
-```
-GET / HTTP/1.1
-Accept: application/json, */*
-Accept-Encoding: gzip, deflate
-Connection: keep-alive
-Content-Length: 16
-Content-Type: application/json
-Host: localhost:8000
-User-Agent: HTTPie/0.9.9
-
-{
-    "name": "John"
-}
-```
-
-#### Response
-```
-HTTP/1.1 200 OK
-Connection: keep-alive
-Content-Length: 24
-Content-Type: application/json
-Keep-Alive: 5
-
-{
-    "message": "Hello John"
-}
-```
-
-### Example validation failure
-#### Request
-```
-GET / HTTP/1.1
-Accept: */*
-Accept-Encoding: gzip, deflate
-Connection: keep-alive
-Host: localhost:8000
-User-Agent: HTTPie/0.9.9
-
-```
-
-#### Response
-```
-HTTP/1.1 400 Bad Request
-Connection: keep-alive
-Content-Length: 168
-Content-Type: application/json
-Keep-Alive: 5
-
-{
-    "error": {
-        "invalid": [
-            {
-                "constraint": true,
-                "entry": "name",
-                "entry_type": "json_data_property",
-                "rule": "required"
-            }
-        ],
-        "message": "Validation failed.",
-        "type": "validation_failed"
-    }
-}
-```
-
-
 ## Building the documentation
 ### Requirements
 * Python
+* Sphinx
 * make
-* Sphinx: `pip install sphinx`
 
 ### Building
 ```
+python setup.py install
 cd docs
 make html
 ```
