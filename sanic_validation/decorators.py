@@ -41,8 +41,8 @@ def validate_args(schema):
 
     def vd(f):
         def v(request, *args, **kwargs):
-            validation_passed = validator.validate(request.raw_args or {})
-            if validation_passed and request.raw_args is not None:
+            validation_passed = validator.validate(request.raw_args)
+            if validation_passed:
                 return f(request, *args, **kwargs)
             else:
                 return _validation_failed_response(validator,
