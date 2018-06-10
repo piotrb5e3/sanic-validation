@@ -123,7 +123,6 @@ Keep-Alive: 5
 * Python
 * make
 * Sphinx: `pip install sphinx`
-* sphinxcontrib-fulltoc: `pip install sphinxcontrib-fulltoc`
 
 ### Building
 ```
