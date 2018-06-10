@@ -5,13 +5,15 @@ JSON_DATA_ENTRY_TYPE = 'json_data_property'
 QUERY_ARG_ENTRY_TYPE = 'query_argument'
 
 
-def validate_json(schema):
+def validate_json(schema, clean=False):
     '''Decorator. Validates request body json.
 
-    Performs validation on *request.json*.
+    When *clean* is true, normalized data is passed to the decorated method
+    as *valid_json*.
 
     Args:
         schema (dict): Cerberus-compatible schema description
+        clean (bool): should cleaned json be passed to the decorated method
     '''
     validator = Validator(schema)
 
@@ -19,6 +21,8 @@ def validate_json(schema):
         def v(request, *args, **kwargs):
             validation_passed = validator.validate(request.json or {})
             if validation_passed and request.json is not None:
+                if clean:
+                    kwargs['valid_json'] = validator.document
                 return f(request, *args, **kwargs)
             else:
                 return _validation_failed_response(validator,
@@ -29,13 +33,15 @@ def validate_json(schema):
     return vd
 
 
-def validate_args(schema):
+def validate_args(schema, clean=False):
     '''Decorator. Validates querystring arguments.
 
-    Performs validation on *request.raw_args*.
+    When *clean* is True, normalized data is passed to the decorated method
+    as *valid_args*.
 
     Args:
         schema (dict): Cerberus-compatible schema description
+        clean (bool): should cleaned args be passed to the decorated method
     '''
     validator = Validator(schema)
 
@@ -43,6 +49,8 @@ def validate_args(schema):
         def v(request, *args, **kwargs):
             validation_passed = validator.validate(request.raw_args)
             if validation_passed:
+                if clean:
+                    kwargs['valid_args'] = validator.document
                 return f(request, *args, **kwargs)
             else:
                 return _validation_failed_response(validator,
@@ -103,4 +111,6 @@ def _rule(error):
 
 
 def _constraint(error):
+    if error.rule == 'coerce':
+        return True
     return error.constraint or False

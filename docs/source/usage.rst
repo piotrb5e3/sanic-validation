@@ -15,6 +15,14 @@ To validate body JSON, use the :func:`~sanic_validation.validate_json` decorator
 If all fields in schema are optional, then an empty JSON object ``{}`` will be accepted,
 but an empty request body will be rejected.
 
+If you set the ``clean`` argument to True, validated and normalized data will be passed to
+the handler method as *valid_json*::
+
+    app.route('/')
+    @validate_json(schema, clean=True)
+    async def my_age(request, valid_json):
+        return text(valid_json['age'])
+
 
 Validating querystring arguments
 --------------------------------
@@ -25,9 +33,16 @@ To validate querystring arguments, use the :func:`~sanic_validation.validate_arg
     async def hello(request):
         return text("OK")
 
-All argument values are strings. To use validation rules for other types use coercion rules
-(see Normalization_).
+.. note:: All querystring argument values are strings.
+          To use validation rules for other types use coercion rules (see Normalization_).
 
+If you set the ``clean`` argument to True, validated and normalized data will be passed to
+the handler method as *valid_args*::
+
+    app.route('/')
+    @validate_args(schema, clean=True)
+    async def my_age(request, valid_args):
+        return text(valid_args['age'])
 
 Error response format
 ---------------------
@@ -75,8 +90,11 @@ For the list of available rules see `Cerberus' schema documentation`_.
 
 Normalization
 -------------
-Normalization for the purpose of validation is supported,
-but you'll have to manually coerce types in the request handler.
+Normalization during validation works by default.
+To access normalized data in handler methods set the *clean* flag on the decorator,
+and create the correct argument in the handler method. See `Validating JSON`_ and
+`Validating querystring arguments`_ for more details.
+
 See `Cerberus' normalization documentation`_ for the list of normalization rules.
 
 
