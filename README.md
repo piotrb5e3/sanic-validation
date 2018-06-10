@@ -116,3 +116,16 @@ Keep-Alive: 5
     }
 }
 ```
+
+
+## Building the documentation
+### Requirements
+* Python
+* make
+* Sphinx: `pip install sphinx`
+
+### Building
+```
+cd docs
+make html
+```

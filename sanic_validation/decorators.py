@@ -6,6 +6,13 @@ QUERY_ARG_ENTRY_TYPE = 'query_argument'
 
 
 def validate_json(schema):
+    '''Decorator. Validates request body json.
+
+    Performs validation on *request.json*.
+
+    Args:
+        schema (dict): Cerberus-compatible schema description
+    '''
     validator = Validator(schema)
 
     def vd(f):
@@ -23,6 +30,13 @@ def validate_json(schema):
 
 
 def validate_args(schema):
+    '''Decorator. Validates querystring arguments.
+
+    Performs validation on *request.raw_args*.
+
+    Args:
+        schema (dict): Cerberus-compatible schema description
+    '''
     validator = Validator(schema)
 
     def vd(f):
