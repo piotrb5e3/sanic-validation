@@ -1,5 +1,6 @@
 from sanic.response import json
 from cerberus import Validator
+from functools import wraps
 
 JSON_DATA_ENTRY_TYPE = 'json_data_property'
 QUERY_ARG_ENTRY_TYPE = 'query_argument'
@@ -19,7 +20,8 @@ def validate_json(schema, clean=False):
     validator = Validator(schema)
 
     def vd(f):
-        def v(request, *args, **kwargs):
+        @wraps(f)
+        def wrapper(request, *args, **kwargs):
             if request.json is None:
                 return _request_body_not_json_response()
             validation_passed = validator.validate(request.json or {})
@@ -31,7 +33,7 @@ def validate_json(schema, clean=False):
                 return _validation_failed_response(validator,
                                                    JSON_DATA_ENTRY_TYPE)
 
-        return v
+        return wrapper
 
     return vd
 
@@ -49,7 +51,8 @@ def validate_args(schema, clean=False):
     validator = Validator(schema)
 
     def vd(f):
-        def v(request, *args, **kwargs):
+        @wraps(f)
+        def wrapper(request, *args, **kwargs):
             validation_passed = validator.validate(request.raw_args)
             if validation_passed:
                 if clean:
@@ -59,7 +62,7 @@ def validate_args(schema, clean=False):
                 return _validation_failed_response(validator,
                                                    QUERY_ARG_ENTRY_TYPE)
 
-        return v
+        return wrapper
 
     return vd
 
