@@ -7,7 +7,7 @@ QUERY_ARG_ENTRY_TYPE = 'query_argument'
 REQ_BODY_ENTRY_TYPE = 'request_body'
 
 
-def validate_json(schema, clean=False):
+def validate_json(schema, clean=False, status_code=400):
     '''Decorator. Validates request body json.
 
     When *clean* is true, normalized data is passed to the decorated method
@@ -16,6 +16,7 @@ def validate_json(schema, clean=False):
     Args:
         schema (dict): Cerberus-compatible schema description
         clean (bool): should cleaned json be passed to the decorated method
+        status_code (number): status code to return when data is incorrect
     '''
     validator = Validator(schema)
 
@@ -31,14 +32,15 @@ def validate_json(schema, clean=False):
                 return f(request, *args, **kwargs)
             else:
                 return _validation_failed_response(validator,
-                                                   JSON_DATA_ENTRY_TYPE)
+                                                   JSON_DATA_ENTRY_TYPE,
+                                                   status_code)
 
         return wrapper
 
     return vd
 
 
-def validate_args(schema, clean=False):
+def validate_args(schema, clean=False, status_code=400):
     '''Decorator. Validates querystring arguments.
 
     When *clean* is True, normalized data is passed to the decorated method
@@ -47,6 +49,7 @@ def validate_args(schema, clean=False):
     Args:
         schema (dict): Cerberus-compatible schema description
         clean (bool): should cleaned args be passed to the decorated method
+        status_code (number): status code to return when data is incorrect
     '''
     validator = Validator(schema)
 
@@ -60,14 +63,15 @@ def validate_args(schema, clean=False):
                 return f(request, *args, **kwargs)
             else:
                 return _validation_failed_response(validator,
-                                                   QUERY_ARG_ENTRY_TYPE)
+                                                   QUERY_ARG_ENTRY_TYPE,
+                                                   status_code)
 
         return wrapper
 
     return vd
 
 
-def _validation_failed_response(validator, entry_type):
+def _validation_failed_response(validator, entry_type, status_code=400):
     return json(
         {
             'error': {
@@ -76,7 +80,7 @@ def _validation_failed_response(validator, entry_type):
                 'invalid': _validation_failures_list(validator, entry_type)
             }
         },
-        status=400)
+        status=status_code)
 
 
 def _validation_failures_list(validator, entry_type):

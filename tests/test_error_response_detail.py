@@ -132,6 +132,43 @@ class TestErrorResponseDetailForJson(unittest.TestCase):
                               self._expected_errors)
 
 
+class TestErrorResponseStatusForJson(unittest.TestCase):
+    _endpoint_schema = {
+        'name': {
+            'type': 'string',
+            'required': True
+        },
+    }
+
+    _params_data = {}
+
+    _expected_errors = [{
+        'entry_type': 'json_data_property',
+        'entry': 'name',
+        'rule': 'required',
+        'constraint': True
+    }]
+
+    def setUp(self):
+        self._app = Sanic()
+
+        @self._app.route('/')
+        @validate_json(self._endpoint_schema, status_code=422)
+        async def _endpoint(request):
+            return json({'status': 'ok'})
+
+    def test_response_should_use_provided_status_code(self):
+        _, response = self._app.test_client.get('/', json=self._params_data)
+
+        self.assertEqual(response.status, 422)
+        self.assertEqual(response.json['error']['message'],
+                         'Validation failed.')
+        self.assertEqual(response.json['error']['type'], 'validation_failed')
+
+        self.assertCountEqual(response.json['error']['invalid'],
+                              self._expected_errors)
+
+
 class TestErrorResponseDetailForParams(unittest.TestCase):
     _endpoint_schema = {
         'name': {
@@ -166,6 +203,43 @@ class TestErrorResponseDetailForParams(unittest.TestCase):
         _, response = self._app.test_client.get('/', params=self._params_data)
 
         self.assertEqual(response.status, 400)
+        self.assertEqual(response.json['error']['message'],
+                         'Validation failed.')
+        self.assertEqual(response.json['error']['type'], 'validation_failed')
+
+        self.assertCountEqual(response.json['error']['invalid'],
+                              self._expected_errors)
+
+
+class TestErrorResponseStatusForParams(unittest.TestCase):
+    _endpoint_schema = {
+        'name': {
+            'type': 'string',
+            'required': True
+        },
+    }
+
+    _params_data = {}
+
+    _expected_errors = [{
+        'entry_type': 'query_argument',
+        'entry': 'name',
+        'rule': 'required',
+        'constraint': True
+    }]
+
+    def setUp(self):
+        self._app = Sanic()
+
+        @self._app.route('/')
+        @validate_args(self._endpoint_schema, status_code=422)
+        async def _endpoint(request):
+            return json({'status': 'ok'})
+
+    def test_response_should_use_provided_status_code(self):
+        _, response = self._app.test_client.get('/', params=self._params_data)
+
+        self.assertEqual(response.status, 422)
         self.assertEqual(response.json['error']['message'],
                          'Validation failed.')
         self.assertEqual(response.json['error']['type'], 'validation_failed')
