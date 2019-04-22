@@ -9,3 +9,13 @@
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
+  deploy:
+    # Deploy from master to test-pypi
+    provider: pypi
+    user: piotrb5e3
+    password:
+      secure: "O0SCJbeWKoVGaF3XaQGQAAo26PzxgcbKxF+hMGuaxPp9kCO0L/R2jTPMbpWe5eNrPrP2lBAy9E2rwXj8xwIQNACDiUlL9CrMIRzoMPoZMld1DLq3pHHyMcK0URgyTiwqgPtRb2KKUk5pSbgDYADH7C9G4m6D4PmZkjQ/hkHZ3/WqDbHa6Qeid+mipHZjzbBmorUbxnzrkgV5ArUwO1O84smUb0TWvTedXrWHslAe6QvdhZRjz64ndcFhUiqxoFBt0fy3T0cTr14XKAVZGFOApzAc2Rp5K3MAdXqagP75ZabEQxJ02WxBs72C9Z858s0vCC+vS4rQqriGiC5oUhsTSEIZl15yWIzwdcQP4KwNtPWSm7qYDLaPQkLA9pwfII+CcBK9+Dl6A2Cd20LwqCkgksi7pS/XNLqZph8toG2OhN8Zxes/rGx3JP+l/+4eUsVrobjfy949Y4DyUx+ujCX+o4R5Af0njClZcmBrYIPeLGjAcaFuXFEyl37yrCq1a9iSnZIe65iCPs49zZ+IOpBJzsLBEmnrFZBv78XbgbGd/w2xbstC+kHzt80Qf8f/VTMoPblgm5xJNePDR6uTbCAvL62xGWbYTPKgFcq3pgTICqDSBnPm4n+r8Ek6w7+lNgSasf0dRiMdAa6ufLB0ggtaTyF6SJ9SKOzok6aZLUHfv3U="
+    server: https://test.pypi.org/simple/
+    on:
+      tags: true
+      skip_cleanup: true
