@@ -16,8 +16,7 @@ def validate_json(schema, clean=False, status_code=400):
     Args:
         schema (dict): Cerberus-compatible schema description
         clean (bool): should cleaned json be passed to the decorated method
-        status_code (number): status code to return when data is incorrect,
-        defaults to 400
+        status_code (number): status code to return when data is incorrect
     '''
     validator = Validator(schema)
 
@@ -50,7 +49,7 @@ def validate_args(schema, clean=False, status_code=400):
     Args:
         schema (dict): Cerberus-compatible schema description
         clean (bool): should cleaned args be passed to the decorated method
-        status_code (number): status code to return when data is incorrect,
+        status_code (number): status code to return when data is incorrect
     '''
     validator = Validator(schema)
 
