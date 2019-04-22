@@ -57,7 +57,7 @@ def validate_args(schema, clean=False, status_code=400):
     def vd(f):
         @wraps(f)
         def wrapper(request, *args, **kwargs):
-            validation_passed = validator.validate(request.raw_args)
+            validation_passed = validator.validate(dict(request.raw_args))
             if validation_passed:
                 if clean:
                     kwargs['valid_args'] = validator.document
