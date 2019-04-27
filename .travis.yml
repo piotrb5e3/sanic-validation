@@ -2,10 +2,12 @@
   python:
     - "3.5"
     - "3.6"
+    - "3.7"
   env:
-    - SANIC_VERSION=""  # Latest
-    - SANIC_VERSION="==0.7.0"
-    - SANIC_VERSION="==0.6.0"
+    - SANIC_VERSION=""          # Latest
+    - SANIC_VERSION="==19.3.*"  # Latest 19.3 version
+    - SANIC_VERSION="==18.12.*" # Latest 18.12 version, LTS
+    - SANIC_VERSION="==0.8.*"   # Latest 0.8
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
