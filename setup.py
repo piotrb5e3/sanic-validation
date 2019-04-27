@@ -31,7 +31,7 @@ setup(
     author='Piotr Bakalarski',
     author_email='piotrb5e3@gmail.com',
     license='GPLv3',
-    install_requires=['sanic>=0.6.0', 'cerberus'],
+    install_requires=['sanic>=0.8.3', 'cerberus'],
     setup_requires=['pytest-runner', 'pytest-flake8'],
     tests_require=['pytest', 'aiohttp', 'flake8'],
     packages=find_packages(),
@@ -42,5 +42,6 @@ setup(
         'Environment :: Web Environment',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 )

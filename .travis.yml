@@ -1,18 +1,31 @@
+  dist: xenial   # required for Python >= 3.7
   language: python
   python:
     - "3.5"
     - "3.6"
+    - "3.7"
   env:
-    - SANIC_VERSION=""  # Latest
-    - SANIC_VERSION="==0.7.0"
-    - SANIC_VERSION="==0.6.0"
+    - SANIC_VERSION=""          # Latest
+    - SANIC_VERSION="==19.3.*"  # Latest 19.3 version
+    - SANIC_VERSION="==18.12.*" # Latest 18.12 version, LTS
+    - SANIC_VERSION="==0.8.*"   # Latest 0.8
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
   deploy:
-    # Deploy from master to test-pypi
-    provider: pypi
-    user: piotrb5e3
-    password:
-      secure: "ZXk7wfwWvOHcXa9AKEVoGpbp05OujKwtoCo3DC70cYb4sV+ZnGClEtP2Iz+4mNehhE6x7PCRhSxnL2ZSIMGT+DlJpYi9qicu1ZFzlZEBA3rS3RK/kZ+3y2R/ccU4ofGgU/W7qWQqbvSDyZl8hr/ekVGq52pEWfQXT0/ZAchxzMEFLq2IUGuFVSWY/sXsemlz4oyUIz8J7Vr+Xa1OEFSTleepV22HdMv6CWUkA+44t8/U4CdQ+xZ4EhlIoE5JyU4eavXpDaMdTzaAkIQy6923WodNb7I/Z5u7J22C6TUnbL+WogN++AYdiWPNpphI2NahqDJD0choY4KejkPsIHWRbXIricrL+aKAAdmgXS3nq1C6FHToH77z0XQQs2SZybgsm6cY+DNgNEiZwvDuhcS8/gBF3QDNfdmaNbD2oU3SD7WZS4AbyT2IaSmZh8BkP3Or6raFcx6MEAmlXhTyO6e+6LHsVlxE/Hnj7RBpKnLosJZExfMuUakjb8qDHMMn72kuCnj9c8rDhW4XgNqHgQVqB9usDTyfZd86qvRzaG3aPkd1pmTa4O+oZt79DHZwbC7frNiweymDq90k/k0n61h+Cz6cdzpphPbpwIaN07kykTtvmLUb3C0lWEIRs/y+Qp2GdFYEKhbgoO/w7OkmhIzp/pnSz2dAsZoId7E3h1b0xPQ="
-    skip_existing: true
+    - provider: pypi
+      user: piotrb5e3
+      password:
+        secure: "ZXk7wfwWvOHcXa9AKEVoGpbp05OujKwtoCo3DC70cYb4sV+ZnGClEtP2Iz+4mNehhE6x7PCRhSxnL2ZSIMGT+DlJpYi9qicu1ZFzlZEBA3rS3RK/kZ+3y2R/ccU4ofGgU/W7qWQqbvSDyZl8hr/ekVGq52pEWfQXT0/ZAchxzMEFLq2IUGuFVSWY/sXsemlz4oyUIz8J7Vr+Xa1OEFSTleepV22HdMv6CWUkA+44t8/U4CdQ+xZ4EhlIoE5JyU4eavXpDaMdTzaAkIQy6923WodNb7I/Z5u7J22C6TUnbL+WogN++AYdiWPNpphI2NahqDJD0choY4KejkPsIHWRbXIricrL+aKAAdmgXS3nq1C6FHToH77z0XQQs2SZybgsm6cY+DNgNEiZwvDuhcS8/gBF3QDNfdmaNbD2oU3SD7WZS4AbyT2IaSmZh8BkP3Or6raFcx6MEAmlXhTyO6e+6LHsVlxE/Hnj7RBpKnLosJZExfMuUakjb8qDHMMn72kuCnj9c8rDhW4XgNqHgQVqB9usDTyfZd86qvRzaG3aPkd1pmTa4O+oZt79DHZwbC7frNiweymDq90k/k0n61h+Cz6cdzpphPbpwIaN07kykTtvmLUb3C0lWEIRs/y+Qp2GdFYEKhbgoO/w7OkmhIzp/pnSz2dAsZoId7E3h1b0xPQ="
+      skip_existing: true
+      on:
+        repo: "piotrb5e3/sanic-validation"
+        tags: true
+        all_branches: true
+    - provider: releases
+      api_key:
+        secure: uVYMhrSJu64s3eM5B2QUiJdeTP0Yt9cnUPdsOc0QgWJk2IFEtSqFlzvIWdVsMLAsPIaP5CtDORLzA0ub+q9HthC4Jlunh2ZTEuwTDz/tTf5uWV8wQ0jvwLqweXrvA+N/6FS0pRU2Se+cEWdEQmn716lX2KaWudaIvgWL7e9Ub3SZHPb3vGvL8QblGTYot9emUup7etABEQP9pIkZbAeCvmViGN9zYlAfiOL106zKTe+HzknoHsJMHJ9ttp3UdZrwOfpQHvIqph4zhisjH7D+tGzeT+7xPP7xZ1Kyaz7bwYNGBbFNO++qgAhEmVDwk5+I4pEi7Sn7rpdKU1lUc10MafsRFWrxB90ENOj7A+nriGKpwSdeF9STG/3gMcssbBgSo3eWF19ho/qOXNCNmnFCqSuZw0T5zJhSYFRONEdwwll9XptN61ANiBJUP7tIvFgFgVel03JFjLsILlHtvXgZKt3m0QCFWwnGcLOwOV92XISEws+gKWhp70XotgHsTX34c0XMjkDVDUL+AdenclUixklqiK72xacCnAFtqoPdGhE0YEz9HZTSwl2hcR9+Sl4CBgXc+swUscQ/cihoqV7QRmy98/FfyzwBI6wQayK3V1R5efBh7wDkmB7CN8VpyomjxdjnjEgHYEsLX9bWl/DoydW9u3gdNpjLSQmLIGNzu1Q=
+      on:
+        repo: "piotrb5e3/sanic-validation"
+        tags: true
+        all_branches: true
