@@ -13,7 +13,7 @@ class TestEmptyJsonValidation(unittest.TestCase):
     def setUp(self):
         self._app = Sanic()
 
-        @self._app.route('/')
+        @self._app.route('/', methods=["GET", "POST"])
         @validate_json(self._endpoint_schema)
         async def _simple_endpoint(request):
             return text('OK')
@@ -33,6 +33,6 @@ class TestEmptyJsonValidation(unittest.TestCase):
         }])
 
     def test_endpoint_should_accept_empty_json_object(self):
-        _, response = self._app.test_client.get('/', json={})
+        _, response = self._app.test_client.post('/', json={})
         self.assertEqual(response.status, 200)
         self.assertEqual(response.text, 'OK')

@@ -115,13 +115,13 @@ class TestErrorResponseDetailForJson(unittest.TestCase):
     def setUp(self):
         self._app = Sanic()
 
-        @self._app.route('/')
+        @self._app.route('/', methods=["GET", "POST"])
         @validate_json(self._endpoint_schema)
         async def _endpoint(request):
             return json({'status': 'ok'})
 
     def test_response_should_contain_all_errors(self):
-        _, response = self._app.test_client.get('/', json=self._request_data)
+        _, response = self._app.test_client.post('/', json=self._request_data)
 
         self.assertEqual(response.status, 400)
         self.assertEqual(response.json['error']['message'],
@@ -152,13 +152,13 @@ class TestErrorResponseStatusForJson(unittest.TestCase):
     def setUp(self):
         self._app = Sanic()
 
-        @self._app.route('/')
+        @self._app.route('/', methods=["GET", "POST"])
         @validate_json(self._endpoint_schema, status_code=422)
         async def _endpoint(request):
             return json({'status': 'ok'})
 
     def test_response_should_use_provided_status_code(self):
-        _, response = self._app.test_client.get('/', json=self._params_data)
+        _, response = self._app.test_client.post('/', json=self._params_data)
 
         self.assertEqual(response.status, 422)
         self.assertEqual(response.json['error']['message'],
