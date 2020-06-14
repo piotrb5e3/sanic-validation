@@ -7,7 +7,7 @@ Validating JSON
 ---------------
 To validate body JSON, use the :func:`~sanic_validation.validate_json` decorator::
 
-    @app.route('/')
+    @app.route('/', methods=["POST"])
     @validate_json(schema)
     async def hello(request):
         return text("OK")
@@ -18,7 +18,7 @@ but an empty request body will be rejected.
 If you set the ``clean`` argument to True, validated and normalized data will be passed to
 the handler method as *valid_json*::
 
-    app.route('/')
+    app.route('/', methods=["POST"])
     @validate_json(schema, clean=True)
     async def my_age(request, valid_json):
         return text(valid_json['age'])
