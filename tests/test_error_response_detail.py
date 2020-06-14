@@ -113,7 +113,7 @@ class TestErrorResponseDetailForJson(unittest.TestCase):
     _app = None
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/', methods=["POST"])
         @validate_json(self._endpoint_schema)
@@ -150,7 +150,7 @@ class TestErrorResponseStatusForJson(unittest.TestCase):
     }]
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/', methods=["POST"])
         @validate_json(self._endpoint_schema, status_code=422)
@@ -192,7 +192,7 @@ class TestErrorResponseDetailForParams(unittest.TestCase):
     }]
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/')
         @validate_args(self._endpoint_schema)
@@ -229,7 +229,7 @@ class TestErrorResponseStatusForParams(unittest.TestCase):
     }]
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/')
         @validate_args(self._endpoint_schema, status_code=422)

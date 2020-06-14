@@ -17,7 +17,7 @@ class TestSimpleJSONNormalization(unittest.TestCase):
     _app = None
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/', methods=["POST"])
         @validate_json(self._endpoint_schema, clean=True)
@@ -61,7 +61,7 @@ class TestSimpleArgsNormalization(unittest.TestCase):
     _app = None
 
     def setUp(self):
-        self._app = Sanic()
+        self._app = Sanic('test-app')
 
         @self._app.route('/')
         @validate_args(self._endpoint_schema, clean=True)
