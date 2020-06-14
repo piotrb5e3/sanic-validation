@@ -1,14 +1,15 @@
   dist: xenial   # required for Python >= 3.7
   language: python
   python:
-    - "3.5"
     - "3.6"
     - "3.7"
+    - "3.8"
   env:
     - SANIC_VERSION=""          # Latest
+    - SANIC_VERSION="==20.3.*"  # Latest 20.3 version
+    - SANIC_VERSION="==19.12.*" # Latest 19.12 version, LTS
+    - SANIC_VERSION="==19.9.*"  # Latest 19.9 version
     - SANIC_VERSION="==19.3.*"  # Latest 19.3 version
-    - SANIC_VERSION="==18.12.*" # Latest 18.12 version, LTS
-    - SANIC_VERSION="==0.8.*"   # Latest 0.8
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
