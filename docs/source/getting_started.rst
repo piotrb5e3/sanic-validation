@@ -17,23 +17,23 @@ Code of the *hello service*::
 
     from sanic import Sanic
     from sanic.response import json
-    from sanic_validation import validate_json
+    from sanic_validation import validate_args
 
-    app = Sanic()
+    app = Sanic('demo-app')
 
     schema = {'name': {'type': 'string', 'required': True}}
 
 
     @app.route('/')
-    @validate_json(schema)
+    @validate_args(schema)
     async def hello(request):
-        return json({'message': 'Hello ' + request.json['name']})
+        return json({'message': 'Hello ' + request.args['name']})
 
     app.run('0.0.0.0')
 
 An example of a bad request::
 
-    POST / HTTP/1.1
+    GET / HTTP/1.1
     Accept: */*
     Accept-Encoding: gzip, deflate
     Connection: keep-alive
@@ -54,7 +54,7 @@ And the response::
                 {
                     "constraint": true,
                     "entry": "name",
-                    "entry_type": "json_data_property",
+                    "entry_type": "query_argument",
                     "rule": "required"
                 }
             ],

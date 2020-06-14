@@ -1,5 +1,8 @@
 # sanic-validation
+[![PyPI](https://img.shields.io/pypi/v/sanic-validation)](https://pypi.org/project/sanic-validation/)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sanic-validation)
 [![Build Status](https://travis-ci.org/piotrb5e3/sanic-validation.svg?branch=master)](https://travis-ci.org/piotrb5e3/sanic-validation)
+[![Read the Docs](https://img.shields.io/readthedocs/sanic-validation)](https://sanic-validation.readthedocs.io/en/stable/)
 
 sanic-validation is an extension to sanic that simplifies validating request data.
 
@@ -13,18 +16,17 @@ Documentation is available at [ReadTheDocs](https://sanic-validation.readthedocs
 ```
 from sanic import Sanic
 from sanic.response import json
-from sanic_validation import validate_json
+from sanic_validation import validate_args
 
-
-app = Sanic()
+app = Sanic('demo-app')
 
 schema = {'name': {'type': 'string', 'required': True}}
 
 
 @app.route('/')
-@validate_json(schema)
-async def hello_service(request):
-    return json({'message': 'Hello ' + request.json['name']})
+@validate_args(schema)
+async def hello(request):
+    return json({'message': 'Hello ' + request.args['name']})
 
 app.run('0.0.0.0')
 ```

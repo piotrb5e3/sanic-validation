@@ -15,7 +15,7 @@
     - ./setup.py -q test
   deploy:
     - provider: pypi
-      user: piotrb5e3
+      username: piotrb5e3
       password:
         secure: "ZXk7wfwWvOHcXa9AKEVoGpbp05OujKwtoCo3DC70cYb4sV+ZnGClEtP2Iz+4mNehhE6x7PCRhSxnL2ZSIMGT+DlJpYi9qicu1ZFzlZEBA3rS3RK/kZ+3y2R/ccU4ofGgU/W7qWQqbvSDyZl8hr/ekVGq52pEWfQXT0/ZAchxzMEFLq2IUGuFVSWY/sXsemlz4oyUIz8J7Vr+Xa1OEFSTleepV22HdMv6CWUkA+44t8/U4CdQ+xZ4EhlIoE5JyU4eavXpDaMdTzaAkIQy6923WodNb7I/Z5u7J22C6TUnbL+WogN++AYdiWPNpphI2NahqDJD0choY4KejkPsIHWRbXIricrL+aKAAdmgXS3nq1C6FHToH77z0XQQs2SZybgsm6cY+DNgNEiZwvDuhcS8/gBF3QDNfdmaNbD2oU3SD7WZS4AbyT2IaSmZh8BkP3Or6raFcx6MEAmlXhTyO6e+6LHsVlxE/Hnj7RBpKnLosJZExfMuUakjb8qDHMMn72kuCnj9c8rDhW4XgNqHgQVqB9usDTyfZd86qvRzaG3aPkd1pmTa4O+oZt79DHZwbC7frNiweymDq90k/k0n61h+Cz6cdzpphPbpwIaN07kykTtvmLUb3C0lWEIRs/y+Qp2GdFYEKhbgoO/w7OkmhIzp/pnSz2dAsZoId7E3h1b0xPQ="
       skip_existing: true
@@ -25,7 +25,7 @@
         all_branches: true
     - provider: releases
       api_key:
-        secure: uVYMhrSJu64s3eM5B2QUiJdeTP0Yt9cnUPdsOc0QgWJk2IFEtSqFlzvIWdVsMLAsPIaP5CtDORLzA0ub+q9HthC4Jlunh2ZTEuwTDz/tTf5uWV8wQ0jvwLqweXrvA+N/6FS0pRU2Se+cEWdEQmn716lX2KaWudaIvgWL7e9Ub3SZHPb3vGvL8QblGTYot9emUup7etABEQP9pIkZbAeCvmViGN9zYlAfiOL106zKTe+HzknoHsJMHJ9ttp3UdZrwOfpQHvIqph4zhisjH7D+tGzeT+7xPP7xZ1Kyaz7bwYNGBbFNO++qgAhEmVDwk5+I4pEi7Sn7rpdKU1lUc10MafsRFWrxB90ENOj7A+nriGKpwSdeF9STG/3gMcssbBgSo3eWF19ho/qOXNCNmnFCqSuZw0T5zJhSYFRONEdwwll9XptN61ANiBJUP7tIvFgFgVel03JFjLsILlHtvXgZKt3m0QCFWwnGcLOwOV92XISEws+gKWhp70XotgHsTX34c0XMjkDVDUL+AdenclUixklqiK72xacCnAFtqoPdGhE0YEz9HZTSwl2hcR9+Sl4CBgXc+swUscQ/cihoqV7QRmy98/FfyzwBI6wQayK3V1R5efBh7wDkmB7CN8VpyomjxdjnjEgHYEsLX9bWl/DoydW9u3gdNpjLSQmLIGNzu1Q=
+        secure: "Tw+c4nNdEadQ6q/vmOE+ps9HB12dC25wzb3Mr9dy0KSMRR+oun8hcdw8On/IKnAY7YbzGElRbGk28KoV2DIj5ImMqkX+hT6gCrKJWIdWLJ9NDBOmOxHfLj6Hc7Aw9INoCVEcZMRd1vOTqD5ajs2rq0rgUnLHVKqUoXKG3nrCVff9lYn9nJ3FJ98KKcR2J1E4NsBsVinSaaKMZqrFzIm9L6J8oXxL+v5gSD7F6GW2fhD+RqXDThHWS8inJzaX7SrqrH7l6ilPpJFvBcaRSoijBjyb4nXu9xF8F7XdYvRgQ7hoxpXfUPDkq391anWxuqi6OGq7Lh5FDjfxrhszK6+adkfop/HmHjbUcGOV9lXm50YJLVAQhppsrw3iUNAvW9RLelPuSa1jejzwZ1IEO0CNBhZ+AFsDYR7zhO2DgyaqqR0OLvtfUrZ4A3sGIWFOOpfymkRaZuFKJ5eIO8RiBogTXG8h3T3wEOH3UFS+BwgWZKhKnN9+pZXk84vjBY+3y0DGmqB3px0bdJFlWGNOXeAxafvEF/DUCer5N4kyNUpwD2tVTJBPVInekEHSXFW7AiAby3sl3IzNy69T0cfUvPRF/SRFK+6cJ7PsCR/dXWkW76iPtpmmov4OBIpGH7cGkSHEWiw/M5nx+Ni1LR1Natk1X1h7oaQspQLsNLmpDOEDjoo="
       on:
         repo: "piotrb5e3/sanic-validation"
         tags: true
