@@ -33,7 +33,7 @@ Code of the *hello service*::
 
 An example of a bad request::
 
-    GET / HTTP/1.1
+    POST / HTTP/1.1
     Accept: */*
     Accept-Encoding: gzip, deflate
     Connection: keep-alive

@@ -19,13 +19,13 @@ class TestSimpleJSONNormalization(unittest.TestCase):
     def setUp(self):
         self._app = Sanic()
 
-        @self._app.route('/')
+        @self._app.route('/', methods=["POST"])
         @validate_json(self._endpoint_schema, clean=True)
         async def _simple_endpoint(request, valid_json):
             return json({'req_room_no': valid_json['room_no']})
 
     def test_numeric_string_value_should_normalize_correctly(self):
-        _, response = self._app.test_client.get('/', json={'room_no': '517'})
+        _, response = self._app.test_client.post('/', json={'room_no': '517'})
         self.assertEqual(response.status, 200)
         self.assertEqual(response.json['req_room_no'], 517)
 
@@ -41,7 +41,7 @@ class TestSimpleJSONNormalization(unittest.TestCase):
             'rule': 'type',
             'constraint': 'integer'
         }]
-        _, response = self._app.test_client.get('/', json={'room_no': 'k-1'})
+        _, response = self._app.test_client.post('/', json={'room_no': 'k-1'})
         self.assertEqual(response.status, 400)
         self.assertEqual(response.json['error']['message'],
                          'Validation failed.')
