@@ -10,7 +10,6 @@
     - SANIC_VERSION="==19.12.*" # Latest 19.12 version, LTS
     - SANIC_VERSION="==19.9.*"  # Latest 19.9 version
     - SANIC_VERSION="==19.3.*"  # Latest 19.3 version
-    - SANIC_VERSION="==18.12.*" # Latest 18.12 version, LTS
   script:
     - pip install -q sanic${SANIC_VERSION}
     - ./setup.py -q test
