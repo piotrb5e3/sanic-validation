@@ -1,4 +1,5 @@
 from sanic.response import json
+from sanic.exceptions import InvalidUsage
 from cerberus import Validator
 from functools import wraps
 
@@ -23,9 +24,13 @@ def validate_json(schema, clean=False, status_code=400):
     def vd(f):
         @wraps(f)
         def wrapper(request, *args, **kwargs):
-            if request.json is None:
+            try: json = request.json
+            except InvalidUsage: json = None
+                
+            if json is None:
                 return _request_body_not_json_response()
-            validation_passed = validator.validate(request.json or {})
+            
+            validation_passed = validator.validate(json or {})
             if validation_passed:
                 if clean:
                     kwargs['valid_json'] = validator.document
