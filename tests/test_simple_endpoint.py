@@ -56,6 +56,31 @@ class TestSimpleEndpointArgsValidation(unittest.TestCase):
         self.assertEqual(response.json['status'], 'ok')
 
 
+class TestSimpleEndpointListArgsValidation(unittest.TestCase):
+    _endpoint_schema = {'name': {'type': 'list', 'required': True}}
+    _app = None
+
+    def setUp(self):
+        self._app = Sanic('test-app')
+
+        @self._app.route('/')
+        @validate_args(self._endpoint_schema)
+        async def _simple_endpoint(request):
+            return json({'status': 'ok'})
+
+    def test_should_fail_for_empty_validation(self):
+        _, response = self._app.test_client.get('/')
+        self.assertEqual(response.status, 400)
+        self.assertEqual(response.json['error']['message'],
+                         'Validation failed.')
+        self.assertEqual(response.json['error']['type'], 'validation_failed')
+
+    def test_should_pass_validation(self):
+        _, response = self._app.test_client.get('/', params={'name': ['john', 'doe']})
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.json['status'], 'ok')
+
+
 class TestSimpleEndpointArgsTypeNormalizationValidation(unittest.TestCase):
     _endpoint_schema = {
         'val': {'type': 'integer', 'required': True, 'coerce': int}}
